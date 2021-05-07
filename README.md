@@ -1,2 +1,0 @@
-# OfflineCachingKotlinCoroutines
-Caching Mimarisi
