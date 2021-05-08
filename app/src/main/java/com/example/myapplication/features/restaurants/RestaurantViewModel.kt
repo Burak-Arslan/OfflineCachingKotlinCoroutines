@@ -1,11 +1,9 @@
 package com.example.myapplication.features.restaurants
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.myapplication.api.Api
 import com.example.myapplication.data.Restaurant
+import com.example.myapplication.data.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -13,15 +11,8 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class RestaurantViewModel @Inject constructor(api: Api) : ViewModel() {
-    private val restaurantLiveData = MutableLiveData<List<Restaurant>>()
-    val restaurants: LiveData<List<Restaurant>> = restaurantLiveData
+class RestaurantViewModel @Inject constructor(repository: RestaurantRepository) : ViewModel() {
 
-    init {
-        viewModelScope.launch {
-         val restaurants = api.getRestaurants()
-         delay(2000)
-         restaurantLiveData.value = restaurants
-        }
-    }
+    val restaurants = repository.getRestaurants().asLiveData()
+
 }

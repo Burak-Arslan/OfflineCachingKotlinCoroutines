@@ -1,6 +1,9 @@
 package com.example.myapplication.di
 
+import android.app.Application
+import androidx.room.Room
 import com.example.myapplication.api.Api
+import com.example.myapplication.data.RestaurantsDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,4 +26,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRestaurantApi(retrofit: Retrofit):Api = retrofit.create(Api::class.java)
+
+
+    @Provides
+    @Singleton
+    fun provideDatabase(app: Application) : RestaurantsDatabase =
+        Room.databaseBuilder(app, RestaurantsDatabase::class.java,"restaurant_database").build()
 }

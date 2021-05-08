@@ -2,11 +2,12 @@ package com.example.myapplication.features.restaurants
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.LinearLayout
+import android.view.View
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,8 +28,13 @@ class MainActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this@MainActivity)
             }
 
-            viewModel.restaurants.observe(this@MainActivity){ restaurants ->
-                restauratAdapter.submitList(restaurants)
+            viewModel.restaurants.observe(this@MainActivity){ result ->
+                restauratAdapter.submitList(result.data)
+
+                loading.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
+                txtError.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
+                txtError.visibility = View.VISIBLE
+                txtError.text = result.error?.localizedMessage
             }
         }
     }
